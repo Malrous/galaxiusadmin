@@ -1,0 +1,247 @@
+--Galaxius Admin--
+print("Loading Galaxius Admin...")
+local plr = game.Players.LocalPlayer
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Admin Panel",
+   LoadingTitle = "Galaxius Admin Panel",
+   LoadingSubtitle = "by Malrous",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Big Hub"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided",
+      FileName = "", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+--VARIABLES--
+local plr = game.Players.LocalPlayer
+local backpack = game.Players.LocalPlayer.Backpack
+local character = game.Players.LocalPlayer.Character
+local humroot = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458) -- Title, Image
+
+local Slider = LocalPlayerTab:CreateSlider({
+   Name = "Walk Speed",
+   Range = {0, 500},
+   Increment = 10,
+   Suffix = "Speed",
+   CurrentValue = 0,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+      plr.Character.Humanoid.WalkSpeed = Value
+   end,
+})
+
+local Slider = LocalPlayerTab:CreateSlider({
+   Name = "Jump Power",
+   Range = {0, 500},
+   Increment = 10,
+   Suffix = "Power",
+   CurrentValue = 0,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+      plr.Character.Humanoid.JumpPower = Value
+   end,
+})
+
+local Button = LocalPlayerTab:CreateButton({
+   Name = "Reset",
+   Callback = function()
+      plr.Character.Humanoid.Health = 0
+   end,
+})
+
+local Toggle = LocalPlayerTab:CreateToggle({
+   Name = "Shiftlock",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+      plr.DevEnableMouseLock = (Value)
+   end,
+})
+
+local Input = TrollingTab:CreateInput({
+   Name = "Hitbox All",
+   PlaceholderText = "Size",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       _G.HeadSize = (Text)
+       _G.Disabled = true
+       
+       game:GetService('RunService').RenderStepped:connect(function()
+       if _G.Disabled then
+       for i,v in next, game:GetService('Players'):GetPlayers() do
+       if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+       pcall(function()
+       v.Character.HumanoidRootPart.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+       v.Character.HumanoidRootPart.Transparency = 0.5
+       v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Medium stone grey")
+       v.Character.HumanoidRootPart.Material = "Neon"
+       v.Character.HumanoidRootPart.CanCollide = false
+       end)
+       end
+       end
+       end
+       end)
+       
+   end,
+})
+
+local ToolsTab = Window:CreateTab("Tools", 4483362458) -- Title, Image
+
+local ToolsParagraph = ToolsTab:CreateParagraph({Title = "Note", Content = "Tools like Btools or F3X is not FE so expect players to not see your builds"})
+
+local Button = ToolsTab:CreateButton({
+   Name = "Btools",
+   Callback = function()
+      game:GetService("StarterGui"):SetCore("SendNotification", { 
+         Title = "Btools Loaded!";
+         Text = "Use the F3X option below for more modifications";
+         Icon = "" })
+         Duration = 2;
+         hammer = Instance.new("HopperBin")
+        hammer.Name = "Hammer"
+        hammer.BinType = 4
+        hammer.Parent = backpack
+        
+        cloneTool = Instance.new("HopperBin")
+        cloneTool.Name = "Clone"
+        cloneTool.BinType = 3
+        cloneTool.Parent = backpack
+        
+        grabTool = Instance.new("HopperBin")
+        grabTool.Name = "Grab"
+        grabTool.BinType = 2
+        grabTool.Parent = backpack
+   end,
+})
+
+local Button = ToolsTab:CreateButton({
+   Name = "F3X",
+   Callback = function()
+      game:GetService("StarterGui"):SetCore("SendNotification", { 
+         Title = "F3X Loaded!";
+         Text = "Reminder: No one can see your builds or modifications so your trolls will not be seen. Also, this tool will spam your console so don't mind it";
+         Icon = "" })
+         Duration = 2;
+      loadstring(game:GetObjects("rbxassetid://6695644299")[1].Source)()
+   end,
+})
+
+local Button = ToolsTab:CreateButton({
+   Name = "Teleport Tool",
+   Callback = function()
+      local backpack = game.Players.LocalPlayer.Backpack
+      local tool = Instance.new("Tool")
+      tool.RequiresHandle = false
+      tool.Name = "Teleport Tool"
+      tool.CanBeDropped = false
+      local pos = mouse.Hit+Vector3.new(0,2.5,0)
+      pos = CFrame.new(pos.X,pos.Y,pos.Z)
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos
+   end,
+})
+
+local Button = ToolsTab:CreateButton({
+   Name = "Gravity Gun",
+   Callback = function()
+      --Nameless Admin's Gravity Gun
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/gravity%20gun"))()
+   end,
+})
+
+local TrollingTab = Window:CreateTab("Trolling", 4483362458) -- Title, Image
+
+local Label = TrollingTab:CreateLabel("Server-sided Options")
+
+local Button = TrollingTab:CreateButton({
+   Name = "FE Clear Chat",
+   Callback = function()
+    --Credits to Asu for the script
+    local TextChatService = game:GetService("TextChatService")
+    local function chatMessage(str)
+        str = tostring(str)
+        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+            TextChatService.TextChannels.RBXGeneral:SendAsync(str)
+        else
+            ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str, "All")
+        end
+    end
+    
+    blob = "\u{000D}"
+        chatMessage(":)".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. "{System} Chat Cleared!")
+   end,
+})
+
+local Button = TrollingTab:CreateButton({
+   Name = "FE",
+   Callback = function()
+    --Credits to Asu for the script
+    local TextChatService = game:GetService("TextChatService")
+    local function chatMessage(str)
+        str = tostring(str)
+        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+            TextChatService.TextChannels.RBXGeneral:SendAsync(str)
+        else
+            ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str, "All")
+        end
+    end
+    
+    blob = "\u{000D}"
+        chatMessage(":)".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. " ".. blob .. "{System} Chat Cleared!")
+   end,
+})
+
+local Input = TrollingTab:CreateInput({
+   Name = "Hitbox All",
+   PlaceholderText = "Size",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       _G.HeadSize = (Text)
+       _G.Disabled = true
+       
+       game:GetService('RunService').RenderStepped:connect(function()
+       if _G.Disabled then
+       for i,v in next, game:GetService('Players'):GetPlayers() do
+       if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+       pcall(function()
+       v.Character.HumanoidRootPart.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+       v.Character.HumanoidRootPart.Transparency = 0.5
+       v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Medium stone grey")
+       v.Character.HumanoidRootPart.Material = "Neon"
+       v.Character.HumanoidRootPart.CanCollide = false
+       end)
+       end
+       end
+       end
+       end)
+       
+   end,
+})
+
+local Button = TrollingTab:CreateButton({
+   Name = "Jump Higher Bypass",
+   Callback = function()
+      while true do
+      plr.Character.Humanoid.Sit = true
+      wait()
+      end
+   end,
+})
