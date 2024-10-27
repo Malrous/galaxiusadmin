@@ -235,13 +235,3 @@ local Input = TrollingTab:CreateInput({
        
    end,
 })
-
-local Button = TrollingTab:CreateButton({
-   Name = "Jump Higher Bypass",
-   Callback = function()
-      while true do
-      plr.Character.Humanoid.Sit = true
-      wait()
-      end
-   end,
-})
