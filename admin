@@ -77,7 +77,7 @@ local Toggle = LocalPlayerTab:CreateToggle({
    end,
 })
 
-local Input = TrollingTab:CreateInput({
+local Input = LocalPlayerTab:CreateInput({
    Name = "Hitbox All",
    PlaceholderText = "Size",
    RemoveTextAfterFocusLost = false,
@@ -235,3 +235,5 @@ local Input = TrollingTab:CreateInput({
        
    end,
 })
+
+print("Galaxius Admin - Successfully loaded!")
